@@ -12,7 +12,11 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
 	 idr.o int_sqrt.o extable.o prio_tree.o \
 	 sha1.o irq_regs.o reciprocal_div.o argv_split.o \
 	 proportions.o prio_heap.o ratelimit.o show_mem.o \
+<<<<<<< HEAD
 	 is_single_threaded.o plist.o decompress.o flex_array.o \
+=======
+	 is_single_threaded.o plist.o decompress.o \
+>>>>>>> 89ca98f... lib: backport memory_alloc from cafs 3.0
 	 memory_alloc.o
 
 lib-$(CONFIG_MMU) += ioremap.o
