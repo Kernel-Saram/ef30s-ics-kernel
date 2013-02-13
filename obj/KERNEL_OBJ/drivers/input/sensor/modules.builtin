@@ -1,0 +1,6 @@
+kernel/drivers/input/sensor/EF18K_EF30S/yas_mag_kernel_driver.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_ori_kernel_driver.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_acc_kernel_driver.ko
+kernel/drivers/input/sensor/EF18K_EF30S/apds9900.ko
+kernel/drivers/input/sensor/EF18K_EF30S/proximity.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_gyro_kernel_driver.ko

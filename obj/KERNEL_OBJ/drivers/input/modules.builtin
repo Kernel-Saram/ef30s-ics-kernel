@@ -1,0 +1,16 @@
+kernel/drivers/input/input-core.ko
+kernel/drivers/input/evdev.ko
+kernel/drivers/input/keyboard/pmic8058-keypad.ko
+kernel/drivers/input/misc/gpio_event.ko
+kernel/drivers/input/misc/gpio_matrix.ko
+kernel/drivers/input/misc/gpio_input.ko
+kernel/drivers/input/misc/gpio_output.ko
+kernel/drivers/input/misc/gpio_axis.ko
+kernel/drivers/input/misc/uinput.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_mag_kernel_driver.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_ori_kernel_driver.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_acc_kernel_driver.ko
+kernel/drivers/input/sensor/EF18K_EF30S/apds9900.ko
+kernel/drivers/input/sensor/EF18K_EF30S/proximity.ko
+kernel/drivers/input/sensor/EF18K_EF30S/yas_gyro_kernel_driver.ko
+kernel/drivers/input/touchscreen/qt602240.ko
