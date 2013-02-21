@@ -316,17 +316,12 @@ void bitmap_clear(unsigned long *map, int start, int nr)
 EXPORT_SYMBOL(bitmap_clear);
 
 /**
-<<<<<<< HEAD
  * bitmap_find_next_zero_area_off - find a contiguous aligned zero area
-=======
- * bitmap_find_next_zero_area - find a contiguous aligned zero area
->>>>>>> f3747d8... lib: bitmap/genalloc: backport from cafs 3.0
  * @map: The address to base the search on
  * @size: The bitmap size in bits
  * @start: The bitnumber to start searching at
  * @nr: The number of zeroed bits we're looking for
  * @align_mask: Alignment mask for zero area
-<<<<<<< HEAD
  * @align_offset: Alignment offset for zero area
  *
  * The @align_mask should be one less than a power of 2; the effect is that
@@ -339,20 +334,6 @@ unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
 					 unsigned int nr,
 					 unsigned long align_mask,
 					 unsigned long align_offset)
-=======
- * @align_offset: Alignment offset for zero area.
- *
- * The @align_mask should be one less than a power of 2; the effect is that
- * the bit offset of all zero areas this function finds plus @align_offset
- * is multiple of that power of 2.
- */
-unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
-					     unsigned long size,
-					     unsigned long start,
-					     unsigned int nr,
-					     unsigned long align_mask,
-					     unsigned long align_offset)
->>>>>>> f3747d8... lib: bitmap/genalloc: backport from cafs 3.0
 {
 	unsigned long index, end, i;
 again:
@@ -592,20 +573,12 @@ int bitmap_scnlistprintf(char *buf, unsigned int buflen,
 EXPORT_SYMBOL(bitmap_scnlistprintf);
 
 /**
-<<<<<<< HEAD
  * bitmap_parselist - convert list format ASCII string to bitmap
  * __bitmap_parselist - convert list format ASCII string to bitmap
  * @buf: read nul-terminated user string from this buffer
  * @buflen: buffer size in bytes. If string is smaller than this
  * 	then it must be terminated with a \0.
  * @is_user: location of a buffer, 0 indicates kernel space.
-=======
- * __bitmap_parselist - convert list format ASCII string to bitmap
- * @buf: read nul-terminated user string from this buffer
- * @buflen: buffer size in bytes.  If string is smaller than this
- *    then it must be terminated with a \0.
- * @is_user: location of buffer, 0 indicates kernel space
->>>>>>> f3747d8... lib: bitmap/genalloc: backport from cafs 3.0
  * @maskp: write resulting mask here
  * @nmaskbits: number of bits in mask to be written
  *
@@ -620,13 +593,7 @@ EXPORT_SYMBOL(bitmap_scnlistprintf);
  *    %-EINVAL: invalid character in string
  *    %-ERANGE: bit number specified too large for mask
  */
-<<<<<<< HEAD
 static int __bitmap_parselist(const char *buf, unsigned int buflen, int is_user, unsigned long *maskp, int nmaskbits)
-=======
-static int __bitmap_parselist(const char *buf, unsigned int buflen,
-		int is_user, unsigned long *maskp,
-		int nmaskbits)
->>>>>>> f3747d8... lib: bitmap/genalloc: backport from cafs 3.0
 {
 	unsigned a, b;
 	int c, old_c, totaldigits;
@@ -640,7 +607,6 @@ static int __bitmap_parselist(const char *buf, unsigned int buflen,
 		in_range = 0;
 		a = b = 0;
 
-<<<<<<< HEAD
 	/* Get the next cpu# or a range of cpu#'s */
 	while (buflen) {
 		old_c = c;
@@ -674,44 +640,6 @@ static int __bitmap_parselist(const char *buf, unsigned int buflen,
 		}
 		if (!isdigit(c))
 				return -EINVAL;
-=======
-		/* Get the next cpu# or a range of cpu#'s */
-		while (buflen) {
-			old_c = c;
-			if (is_user) {
-				if (__get_user(c, ubuf++))
-					return -EFAULT;
-			} else
-				c = *buf++;
-			buflen--;
-			if (isspace(c))
-				continue;
-
-			/*
-			 * If the last character was a space and the current
-			 * character isn't '\0', we've got embedded whitespace.
-			 * This is a no-no, so throw an error.
-			 */
-			if (totaldigits && c && isspace(old_c))
-				return -EINVAL;
-
-			/* A '\0' or a ',' signal the end of a cpu# or range */
-			if (c == '\0' || c == ',')
-				break;
-
-			if (c == '-') {
-				if (exp_digit || in_range)
-					return -EINVAL;
-				b = 0;
-				in_range = 1;
-				exp_digit = 1;
-				continue;
-			}
-
-			if (!isdigit(c))
-				return -EINVAL;
-
->>>>>>> f3747d8... lib: bitmap/genalloc: backport from cafs 3.0
 			b = b * 10 + (c - '0');
 			if (!in_range)
 				a = b;
@@ -732,11 +660,7 @@ static int __bitmap_parselist(const char *buf, unsigned int buflen,
 
 int bitmap_parselist(const char *bp, unsigned long *maskp, int nmaskbits)
 {
-<<<<<<< HEAD
 	char *nl = strchr(bp, '\n');
-=======
-	char *nl  = strchr(bp, '\n');
->>>>>>> f3747d8... lib: bitmap/genalloc: backport from cafs 3.0
 	int len;
 
 	if (nl)
@@ -747,34 +671,6 @@ int bitmap_parselist(const char *bp, unsigned long *maskp, int nmaskbits)
 	return __bitmap_parselist(bp, len, 0, maskp, nmaskbits);
 }
 EXPORT_SYMBOL(bitmap_parselist);
-
-
-/**
- * bitmap_parselist_user()
- *
- * @ubuf: pointer to user buffer containing string.
- * @ulen: buffer size in bytes.  If string is smaller than this
- *    then it must be terminated with a \0.
- * @maskp: pointer to bitmap array that will contain result.
- * @nmaskbits: size of bitmap, in bits.
- *
- * Wrapper for bitmap_parselist(), providing it with user buffer.
- *
- * We cannot have this as an inline function in bitmap.h because it needs
- * linux/uaccess.h to get the access_ok() declaration and this causes
- * cyclic dependencies.
- */
-int bitmap_parselist_user(const char __user *ubuf,
-			unsigned int ulen, unsigned long *maskp,
-			int nmaskbits)
-{
-	if (!access_ok(VERIFY_READ, ubuf, ulen))
-		return -EFAULT;
-	return __bitmap_parselist((const char *)ubuf,
-					ulen, 1, maskp, nmaskbits);
-}
-EXPORT_SYMBOL(bitmap_parselist_user);
-
 
 /**
  * bitmap_parselist_user()
